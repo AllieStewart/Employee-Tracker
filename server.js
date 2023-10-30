@@ -25,10 +25,55 @@ const db = mysql.createConnection(
 
 // GET, POST, PUT, DELETE functions here.
 // GET all departments.
+app.get('/api/department', (req, res) => 
+{
+    const sql = `SELECT id, dept_name AS Depts FROM department`;
+  
+    db.query(sql, (err, rows) => {
+      if (err) {
+        res.status(500).json({ error: err.message });
+         return;
+      }
+      res.json({
+        message: 'success',
+        data: rows
+      });
+    });
+});
 
 // GET all roles.
+app.get('/api/role', (req, res) => 
+{
+    const sql = `SELECT id, title AS Roles FROM role`;
+  
+    db.query(sql, (err, rows) => {
+      if (err) {
+        res.status(500).json({ error: err.message });
+         return;
+      }
+      res.json({
+        message: 'success',
+        data: rows
+      });
+    });
+});
 
 // GET all employees.
+app.get('/api/employee', (req, res) => 
+{
+    const sql = `SELECT id, first_name, last_name AS Employees FROM employee`;
+  
+    db.query(sql, (err, rows) => {
+      if (err) {
+        res.status(500).json({ error: err.message });
+         return;
+      }
+      res.json({
+        message: 'success',
+        data: rows
+      });
+    });
+});
 
 // POST new department.
 

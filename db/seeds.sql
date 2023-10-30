@@ -1,4 +1,4 @@
-INSERT INTO department (id, name)
+INSERT INTO department (id, dept_name)
 VALUES (1, "Development");
 
 INSERT INTO role (id, title, salary, department_id)
