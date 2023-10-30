@@ -131,8 +131,29 @@ app.post('/api/new-employee', ({ body }, res) =>
     });
   });
 });
-// PUT (update employee's role).
 
+// PUT (update employee's role).
+app.put('/api/employee/:role_id', (req, res) => {
+    const sql = `UPDATE employee SET first_name = ?, last_name = ? WHERE role_id = ?`;
+    const params = [req.body.first_name, req.body.last_name, req.params.role_id];
+  
+    db.query(sql, params, (err, result) => {
+      if (err) {
+        res.status(400).json({ error: err.message });
+      } else if (!result.affectedRows) {
+        res.json({
+          message: 'Role not found'
+        });
+      } else {
+        res.json({
+          message: 'success',
+          data: req.body,
+          changes: result.affectedRows
+        });
+      }
+    });
+  });
+  
 // BONUS:
 // PUT (update employee's manager(s))
 // GET employee by manager
