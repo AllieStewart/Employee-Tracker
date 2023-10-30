@@ -76,11 +76,61 @@ app.get('/api/employee', (req, res) =>
 });
 
 // POST new department.
+app.post('/api/new-department', ({ body }, res) => 
+{
+    const sql = `INSERT INTO department (dept_name)
+    VALUES (?)`;
+  const params = [body.dept_name];
+  
+  db.query(sql, params, (err, result) => {
+    if (err) {
+      res.status(400).json({ error: err.message });
+      return;
+    }
+    res.json({
+      message: 'success',
+      data: body
+    });
+  });
+});
 
 // POST new role.
+app.post('/api/new-role', ({ body }, res) => 
+{
+    const sql = `INSERT INTO role (role_name)
+    VALUES (?)`;
+  const params = [body.role_name];
+  
+  db.query(sql, params, (err, result) => {
+    if (err) {
+      res.status(400).json({ error: err.message });
+      return;
+    }
+    res.json({
+      message: 'success',
+      data: body
+    });
+  });
+});
 
 // POST new employee.
-
+app.post('/api/new-employee', ({ body }, res) => 
+{
+    const sql = `INSERT INTO employee (first_name, last_name)
+    VALUES (?)`;
+  const params = [body.first_name, body.last_name];
+  
+  db.query(sql, params, (err, result) => {
+    if (err) {
+      res.status(400).json({ error: err.message });
+      return;
+    }
+    res.json({
+      message: 'success',
+      data: body
+    });
+  });
+});
 // PUT (update employee's role).
 
 // BONUS:
