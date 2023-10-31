@@ -12,6 +12,11 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+// Default response for any other request (Not Found).
+app.use((req, res) => {
+    res.status(404).end();
+  });
+
 // Connect to database.
 const db = mysql.createConnection(
     {
@@ -19,15 +24,20 @@ const db = mysql.createConnection(
       host: 'd6rii63wp64rsfb5.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
       user: 'tgd0mxln1cijce41',
       password: 'f78a0ymezkt8pv55',
-      database: 'employees_db'
+      database: 'aor7nu9wipo6wsf3'
     },
     console.log(`Connected to the employees_db database.`)
   );
 
+// App listening on port 3001.
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+
 // Inquirer prompts for user input.
 function run(){
     inquirer
-    .prompt([
+    .prompt(
         {
             type: 'list',
             message: 'What would you like to do?',
@@ -41,9 +51,9 @@ function run(){
                 'Add Employee',
                 'Update Employee Role',
                 'Quit'
-            ]
+            ],
         }
-    ]).then((answer) =>
+    ).then((answer) =>
     {
         switch (answer.selection) {
             case 'View All Departments':
@@ -79,8 +89,8 @@ function viewDepartments()
 {
     //app.get('/api/department', (req, res) => 
     //{
-        const sql = `SELECT id, dept_name AS Depts FROM department`;
-        // const sql = `SELECT * FROM DEPARTMENT`
+        //const sql = `SELECT id, dept_name AS Depts FROM department`;
+        const sql = `SELECT * FROM DEPARTMENT`;
         
         db.query(sql, (err, rows) => {
             // if (err) {
@@ -103,8 +113,8 @@ function viewRoles()
 {
     //app.get('/api/role', (req, res) => 
     //{
-        const sql = `SELECT id, title AS Roles FROM role`;
-        // const sql = `SELECT * FROM ROLE`
+        //const sql = `SELECT id, title AS Roles FROM role`;
+        const sql = `SELECT * FROM ROLE`;
         
         db.query(sql, (err, rows) => {
             // if (err) {
@@ -127,8 +137,8 @@ function viewEmployees()
 {
     //app.get('/api/employee', (req, res) => 
     //{
-        const sql = `SELECT id, first_name, last_name AS Employees FROM employee`;
-        // const sql = `SELECT * FROM EMPLOYEE`
+        //const sql = `SELECT id, first_name, last_name AS Employees FROM employee`;
+        const sql = `SELECT * FROM EMPLOYEE`;
         
         db.query(sql, (err, rows) => {
             // if (err) {
@@ -152,13 +162,13 @@ function addDept()
     //app.post('/api/new-department', ({ body }, res) => 
     //{
         inquirer
-        .prompt([
+        .prompt(
             {
                 name: 'dept_name',
                 type: 'input',
                 message: 'Enter the department name you want to add: '
             }
-        ]).then((answer) => {
+        ).then((answer) => {
 
         const sql = `INSERT INTO department (dept_name) VALUES (?)`;
         const params = [answer.dept_name];
@@ -186,7 +196,7 @@ function addRole()
     //app.post('/api/new-role', ({ body }, res) => 
     //{
         inquirer
-        .prompt([
+        .prompt(
             {
                 name: 'role_name',
                 type: 'input',
@@ -202,7 +212,7 @@ function addRole()
                 type: 'input',
                 message: 'Enter the department ID you want to add: '
             }
-        ]).then((answer) => {
+        ).then((answer) => {
         const sql = `INSERT INTO role (role_name, salary, department_id) VALUES (?, ?, ?)`;
         const params = [answer.role_name, answer.salary, answer.departnent_id];
         
@@ -229,7 +239,7 @@ function addEmployee()
     //app.post('/api/new-employee', ({ body }, res) => 
     //{
         inquirer
-        .prompt([
+        .prompt(
             {
                 name: 'first_name',
                 type: 'input',
@@ -252,7 +262,7 @@ function addEmployee()
                 message: 'Select the manager ID:',
                 choices: employee
             }
-        ]).then((answer) => {
+        ).then((answer) => {
         const sql = `INSERT INTO employee (first_name, last_name) VALUES (?)`;
         const params = [answer.first_name, answer.last_name, answer.role_id, answer.manager_id];
         
@@ -279,7 +289,7 @@ function updateEmpRole()
     //app.put('/api/employee/:role_id', (req, res) => 
     //{
         inquirer
-        .prompt([
+        .prompt(
             {
                 name: 'employee',
                 type: 'list',
@@ -292,7 +302,7 @@ function updateEmpRole()
                 message: 'Select the new role for the employee: ',
                 choices: role
             }
-        ]).then((answer) => {
+        ).then((answer) => {
         const sql = `UPDATE employee SET role_id = ? WHERE first_name = ? AND last_name = ?`;
         const params = [answer.role_id, answer.first_name, answer.last_name];
         
@@ -328,16 +338,6 @@ function updateEmpRole()
 // GET employee by department
 // DELETE departments, roles, employees.
 // GET total budget of department (aka combined salaries of all employees in department) 
-
-// Default response for any other request (Not Found).
-app.use((req, res) => {
-    res.status(404).end();
-  });
-
-// App listening on port 3001.
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
 
 // Start inquirer prompt(s).
 run();
