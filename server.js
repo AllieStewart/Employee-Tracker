@@ -2,7 +2,7 @@
 // Hosts the data for the terminal.
 // Require express, mySQL, and inquirer in order for application to function.
 const express = require('express');
-const mysql = require('mysql2');
+const mysql = require('mysql');
 const inquirer = require('inquirer');
 // PORT and express object.
 const PORT = process.env.PORT || 3001;
