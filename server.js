@@ -2,7 +2,7 @@
 // Hosts the data for the terminal.
 // Require express, mySQL, and inquirer in order for application to function.
 const express = require('express');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const inquirer = require('inquirer');
 // PORT and express object.
 const PORT = process.env.PORT || 3001;
@@ -84,6 +84,7 @@ function viewDepartments()
     app.get('/api/department', (req, res) => 
     {
         const sql = `SELECT id, dept_name AS Depts FROM department`;
+        // const sql = `SELECT * FROM DEPARTMENT`
         
         db.query(sql, (err, rows) => {
             if (err) {
@@ -94,6 +95,8 @@ function viewDepartments()
                 message: 'success',
                 data: rows
             });
+            //console.table(rows);
+            run();
         });
     });
 }
@@ -104,6 +107,7 @@ function viewRoles()
     app.get('/api/role', (req, res) => 
     {
         const sql = `SELECT id, title AS Roles FROM role`;
+        // const sql = `SELECT * FROM ROLE`
         
         db.query(sql, (err, rows) => {
             if (err) {
@@ -114,6 +118,8 @@ function viewRoles()
                 message: 'success',
                 data: rows
             });
+            //console.table(rows);
+            run();
         });
     });
 }
@@ -124,6 +130,7 @@ function viewEmployees()
     app.get('/api/employee', (req, res) => 
     {
         const sql = `SELECT id, first_name, last_name AS Employees FROM employee`;
+        // const sql = `SELECT * FROM EMPLOYEE`
         
         db.query(sql, (err, rows) => {
             if (err) {
@@ -134,6 +141,8 @@ function viewEmployees()
                 message: 'success',
                 data: rows
             });
+            //console.table(rows);
+             run();
         });
     });
 }
@@ -143,8 +152,17 @@ function addDept()
 {
     app.post('/api/new-department', ({ body }, res) => 
     {
+        inquirer
+        .prompt([
+            {
+                name: 'dept_name',
+                type: 'input',
+                message: 'Enter the department name you want to add: '
+            }
+        ]).then((answer) => {
+
         const sql = `INSERT INTO department (dept_name) VALUES (?)`;
-        const params = [body.dept_name];
+        const params = [answer.dept_name];
         
         db.query(sql, params, (err, result) => {
             if (err) {
@@ -155,7 +173,10 @@ function addDept()
                 message: 'success',
                 data: body
             });
+            //console.table(result);
+            run();
         });
+    });
     });
 }
 
@@ -164,8 +185,26 @@ function addRole()
 {
     app.post('/api/new-role', ({ body }, res) => 
     {
-        const sql = `INSERT INTO role (role_name) VALUES (?)`;
-        const params = [body.role_name];
+        inquirer
+        .prompt([
+            {
+                name: 'role_name',
+                type: 'input',
+                message: 'Enter the role name you want to add: '
+            },
+            {
+                name: 'salary',
+                type: 'input',
+                message: 'Enter the salary of the role you want to add (no commas): '
+            },
+            {
+                name: 'department_id',
+                type: 'input',
+                message: 'Enter the department ID you want to add: '
+            }
+        ]).then((answer) => {
+        const sql = `INSERT INTO role (role_name, salary, department_id) VALUES (?, ?, ?)`;
+        const params = [answer.role_name, answer.salary, answer.departnent_id];
         
         db.query(sql, params, (err, result) => {
             if (err) {
@@ -176,7 +215,10 @@ function addRole()
                 message: 'success',
                 data: body
             });
+            //console.table(result);
+            run();
         });
+    });
     });
 }
 
@@ -185,8 +227,33 @@ function addEmployee()
 {
     app.post('/api/new-employee', ({ body }, res) => 
     {
+        inquirer
+        .prompt([
+            {
+                name: 'first_name',
+                type: 'input',
+                message: 'Enter the first name of the employee you want to add: '
+            },
+            {
+                name: 'last_name',
+                type: 'input',
+                message: 'Enter the last name of the employee you want to add: '
+            },
+            {
+                name: 'role_id',
+                type: 'list',
+                message: 'Select the role ID:',
+                choices: role
+            },
+            {
+                name: 'manager_id',
+                type: 'list',
+                message: 'Select the manager ID:',
+                choices: employee
+            }
+        ]).then((answer) => {
         const sql = `INSERT INTO employee (first_name, last_name) VALUES (?)`;
-        const params = [body.first_name, body.last_name];
+        const params = [answer.first_name, answer.last_name, answer.role_id, answer.manager_id];
         
         db.query(sql, params, (err, result) => {
             if (err) {
@@ -197,7 +264,10 @@ function addEmployee()
                 message: 'success',
                 data: body
             });
+            //console.table(result);
+            run();
         });
+    });
     });
 }
 
@@ -206,8 +276,23 @@ function updateEmpRole()
 {
     app.put('/api/employee/:role_id', (req, res) => 
     {
-        const sql = `UPDATE employee SET first_name = ?, last_name = ? WHERE role_id = ?`;
-        const params = [req.body.first_name, req.body.last_name, req.params.role_id];
+        inquirer
+        .prompt([
+            {
+                name: 'employee',
+                type: 'list',
+                message: 'Select the employee whose role you want to update: ',
+                choices: employee
+            },
+            {
+                name: 'new_role',
+                type: 'list',
+                message: 'Select the new role for the employee: ',
+                choices: role
+            }
+        ]).then((answer) => {
+        const sql = `UPDATE employee SET role_id = ? WHERE first_name = ? AND last_name = ?`;
+        const params = [answer.role_id, answer.first_name, answer.last_name];
         
         db.query(sql, params, (err, result) => {
             if (err) {
@@ -227,6 +312,9 @@ function updateEmpRole()
                     changes: result.affectedRows
                 });
             }
+            //console.table(result);
+            run();
+        });
         });
     });
 }
