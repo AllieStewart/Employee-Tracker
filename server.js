@@ -26,7 +26,7 @@ const db = mysql.createConnection(
 
 // Inquirer prompts for user input.
 function run(){
-    return inquirer
+    inquirer
     .prompt([
         {
             type: 'list',
@@ -43,10 +43,9 @@ function run(){
                 'Quit'
             ]
         }
-    ])
-    .then((answers) =>
+    ]).then((answer) =>
     {
-        switch (answers.selection) {
+        switch (answer.selection) {
             case 'View All Departments':
                 viewDepartments();
                 break;
@@ -72,86 +71,86 @@ function run(){
                 db.end();
                 break;
     }
-})
+});
 }
-
-// Start inquirer prompt(s).
-run();
 
 // GET all departments.
 function viewDepartments()
 {
-    app.get('/api/department', (req, res) => 
-    {
+    //app.get('/api/department', (req, res) => 
+    //{
         const sql = `SELECT id, dept_name AS Depts FROM department`;
         // const sql = `SELECT * FROM DEPARTMENT`
         
         db.query(sql, (err, rows) => {
-            if (err) {
-                res.status(500).json({ error: err.message });
-                return;
-            }
-            res.json({
-                message: 'success',
-                data: rows
-            });
-            //console.table(rows);
+            // if (err) {
+            //     res.status(500).json({ error: err.message });
+            //     return;
+            // }
+            // res.json({
+            //     message: 'success',
+            //     data: rows
+            // });
+            if (err) throw err;
+            console.table(rows);
             run();
         });
-    });
+    //});
 }
 
 // GET all roles.
 function viewRoles()
 {
-    app.get('/api/role', (req, res) => 
-    {
+    //app.get('/api/role', (req, res) => 
+    //{
         const sql = `SELECT id, title AS Roles FROM role`;
         // const sql = `SELECT * FROM ROLE`
         
         db.query(sql, (err, rows) => {
-            if (err) {
-                res.status(500).json({ error: err.message });
-                return;
-            }
-            res.json({
-                message: 'success',
-                data: rows
-            });
-            //console.table(rows);
+            // if (err) {
+            //     res.status(500).json({ error: err.message });
+            //     return;
+            // }
+            // res.json({
+            //     message: 'success',
+            //     data: rows
+            // });
+            if (err) throw err;
+            console.table(rows);
             run();
         });
-    });
+    //});
 }
 
 // GET all employees.
 function viewEmployees()
 {
-    app.get('/api/employee', (req, res) => 
-    {
+    //app.get('/api/employee', (req, res) => 
+    //{
         const sql = `SELECT id, first_name, last_name AS Employees FROM employee`;
         // const sql = `SELECT * FROM EMPLOYEE`
         
         db.query(sql, (err, rows) => {
-            if (err) {
-                res.status(500).json({ error: err.message });
-                return;
-            }
-            res.json({
-                message: 'success',
-                data: rows
-            });
-            //console.table(rows);
-             run();
+            // if (err) {
+            //     res.status(500).json({ error: err.message });
+            //     return;
+            // }
+            // res.json({
+            //     message: 'success',
+            //     data: rows
+            // });
+            if (err) throw err;
+            console.table(rows);
+            run();
         });
-    });
+    //});
 }
 
 // POST new department.
 function addDept()
 {
-    app.post('/api/new-department', ({ body }, res) => 
-    {
+    //app.post('/api/new-department', ({ body }, res) => 
+    //{
         inquirer
         .prompt([
             {
@@ -165,26 +164,27 @@ function addDept()
         const params = [answer.dept_name];
         
         db.query(sql, params, (err, result) => {
-            if (err) {
-                res.status(400).json({ error: err.message });
-                return;
-            }
-            res.json({
-                message: 'success',
-                data: body
-            });
-            //console.table(result);
+            // if (err) {
+            //     res.status(400).json({ error: err.message });
+            //     return;
+            // }
+            // res.json({
+            //     message: 'success',
+            //     data: body
+            // });
+            if (err) throw err;
+            console.table(result);
             run();
         });
     });
-    });
+    //});
 }
 
 // POST new role.
 function addRole()
 {
-    app.post('/api/new-role', ({ body }, res) => 
-    {
+    //app.post('/api/new-role', ({ body }, res) => 
+    //{
         inquirer
         .prompt([
             {
@@ -207,26 +207,27 @@ function addRole()
         const params = [answer.role_name, answer.salary, answer.departnent_id];
         
         db.query(sql, params, (err, result) => {
-            if (err) {
-                res.status(400).json({ error: err.message });
-                return;
-            }
-            res.json({
-                message: 'success',
-                data: body
-            });
-            //console.table(result);
+            // if (err) {
+            //     res.status(400).json({ error: err.message });
+            //     return;
+            // }
+            // res.json({
+            //     message: 'success',
+            //     data: body
+            // });
+            if (err) throw err;
+            console.table(result);
             run();
         });
     });
-    });
+    //});
 }
 
 // POST new employee.
 function addEmployee()
 {
-    app.post('/api/new-employee', ({ body }, res) => 
-    {
+    //app.post('/api/new-employee', ({ body }, res) => 
+    //{
         inquirer
         .prompt([
             {
@@ -256,26 +257,27 @@ function addEmployee()
         const params = [answer.first_name, answer.last_name, answer.role_id, answer.manager_id];
         
         db.query(sql, params, (err, result) => {
-            if (err) {
-                res.status(400).json({ error: err.message });
-                return;
-            }
-            res.json({
-                message: 'success',
-                data: body
-            });
-            //console.table(result);
+            // if (err) {
+            //     res.status(400).json({ error: err.message });
+            //     return;
+            // }
+            // res.json({
+            //     message: 'success',
+            //     data: body
+            // });
+            if (err) throw err;
+            console.table(result);
             run();
         });
     });
-    });
+    //});
 }
 
 // PUT (update employee's role).
 function updateEmpRole()
 {
-    app.put('/api/employee/:role_id', (req, res) => 
-    {
+    //app.put('/api/employee/:role_id', (req, res) => 
+    //{
         inquirer
         .prompt([
             {
@@ -295,28 +297,29 @@ function updateEmpRole()
         const params = [answer.role_id, answer.first_name, answer.last_name];
         
         db.query(sql, params, (err, result) => {
-            if (err) {
-                res.status(400).json({ error: err.message });
-            } 
-            else if (!result.affectedRows) 
-            {
-                res.json({
-                    message: 'Role not found'
-                });
-            } 
-            else 
-            {
-                res.json({
-                    message: 'success',
-                    data: req.body,
-                    changes: result.affectedRows
-                });
-            }
-            //console.table(result);
+            // if (err) {
+            //     res.status(400).json({ error: err.message });
+            // } 
+            // else if (!result.affectedRows) 
+            // {
+            //     res.json({
+            //         message: 'Role not found'
+            //     });
+            // } 
+            // else 
+            // {
+            //     res.json({
+            //         message: 'success',
+            //         data: req.body,
+            //         changes: result.affectedRows
+            //     });
+            // }
+            if (err) throw err;
+            console.table(result);
             run();
         });
         });
-    });
+    //});
 }
   
 // BONUS:
@@ -335,4 +338,7 @@ app.use((req, res) => {
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
+
+// Start inquirer prompt(s).
+run();
 // End of JS file
