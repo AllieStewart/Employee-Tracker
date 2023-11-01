@@ -93,15 +93,14 @@ function viewDepartments()
         const sql = `SELECT * FROM DEPARTMENT`;
         
         db.query(sql, (err, rows) => {
-            // if (err) {
-            //     res.status(500).json({ error: err.message });
-            //     return;
-            // }
+            if (err) {
+                res.status(500).json({ error: err.message });
+                return;
+            }
             // res.json({
             //     message: 'success',
             //     data: rows
             // });
-            if (err) throw err;
             console.table(rows);
             run();
         });
@@ -117,15 +116,14 @@ function viewRoles()
         const sql = `SELECT * FROM ROLE`;
         
         db.query(sql, (err, rows) => {
-            // if (err) {
-            //     res.status(500).json({ error: err.message });
-            //     return;
-            // }
+            if (err) {
+                res.status(500).json({ error: err.message });
+                return;
+            }
             // res.json({
             //     message: 'success',
             //     data: rows
             // });
-            if (err) throw err;
             console.table(rows);
             run();
         });
@@ -141,15 +139,14 @@ function viewEmployees()
         const sql = `SELECT * FROM EMPLOYEE`;
         
         db.query(sql, (err, rows) => {
-            // if (err) {
-            //     res.status(500).json({ error: err.message });
-            //     return;
-            // }
+            if (err) {
+                res.status(500).json({ error: err.message });
+                return;
+            }
             // res.json({
             //     message: 'success',
             //     data: rows
             // });
-            if (err) throw err;
             console.table(rows);
             run();
         });
@@ -172,20 +169,27 @@ function addDept()
 
         const sql = `INSERT INTO department (dept_name) VALUES (?)`;
         const params = [answer.dept_name];
+        db.query(sql, params, (err, result) => {
+            if (err) 
+            {
+                throw err;
+            }
+        
+        console.log('The new department has been added to the database.');
         
         db.query(sql, params, (err, result) => {
-            // if (err) {
-            //     res.status(400).json({ error: err.message });
-            //     return;
-            // }
+            if (err) {
+                res.status(400).json({ error: err.message });
+                return;
+            }
             // res.json({
             //     message: 'success',
             //     data: body
             // });
-            if (err) throw err;
             console.table(result);
             run();
         });
+    });
     });
     //});
 }
@@ -215,20 +219,27 @@ function addRole()
         ).then((answer) => {
         const sql = `INSERT INTO role (role_name, salary, department_id) VALUES (?, ?, ?)`;
         const params = [answer.role_name, answer.salary, answer.departnent_id];
+        db.query(sql, params, (err, result) => {
+            if (err) 
+            {
+                throw err;
+            }
+
+        console.log('The new role has been added to the database.');
         
         db.query(sql, params, (err, result) => {
-            // if (err) {
-            //     res.status(400).json({ error: err.message });
-            //     return;
-            // }
+            if (err) {
+                res.status(400).json({ error: err.message });
+                return;
+            }
             // res.json({
             //     message: 'success',
             //     data: body
             // });
-            if (err) throw err;
             console.table(result);
             run();
         });
+    });
     });
     //});
 }
@@ -265,20 +276,28 @@ function addEmployee()
         ).then((answer) => {
         const sql = `INSERT INTO employee (first_name, last_name) VALUES (?)`;
         const params = [answer.first_name, answer.last_name, answer.role_id, answer.manager_id];
+
+        db.query(sql, params, (err, result) => {
+            if (err) 
+            {
+                throw err;
+            }
+
+        console.log('The new employee has been added to the database.');
         
         db.query(sql, params, (err, result) => {
-            // if (err) {
-            //     res.status(400).json({ error: err.message });
-            //     return;
-            // }
+            if (err) {
+                res.status(400).json({ error: err.message });
+                return;
+            }
             // res.json({
             //     message: 'success',
             //     data: body
             // });
-            if (err) throw err;
             console.table(result);
             run();
         });
+    });
     });
     //});
 }
@@ -291,25 +310,31 @@ function updateEmpRole()
         inquirer
         .prompt(
             {
-                name: 'employee',
-                type: 'list',
-                message: 'Select the employee whose role you want to update: ',
-                choices: employee
+                name: 'last_name',
+                type: 'input',
+                message: 'Enter the employee last name whose role you want to update: ',
             },
             {
-                name: 'new_role',
-                type: 'list',
-                message: 'Select the new role for the employee: ',
-                choices: role
+                name: 'role_id',
+                type: 'number',
+                message: 'Enter the new role number for the employee: ',
             }
         ).then((answer) => {
-        const sql = `UPDATE employee SET role_id = ? WHERE first_name = ? AND last_name = ?`;
-        const params = [answer.role_id, answer.first_name, answer.last_name];
-        
+        const sql = `UPDATE employee SET role_id = ? WHERE last_name = ?`;
+        const params = [answer.role_id, answer.last_name];
+
         db.query(sql, params, (err, result) => {
-            // if (err) {
-            //     res.status(400).json({ error: err.message });
-            // } 
+            if (err) 
+            {
+                throw err;
+            }
+
+        console.log('The employee role has been updated.');
+        
+        db.query(`SELECT * FROM employee`, (err, result) => {
+            if (err) {
+                res.status(400).json({ error: err.message });
+            } 
             // else if (!result.affectedRows) 
             // {
             //     res.json({
@@ -324,11 +349,11 @@ function updateEmpRole()
             //         changes: result.affectedRows
             //     });
             // }
-            if (err) throw err;
             console.table(result);
             run();
         });
-        });
+    });
+    });
     //});
 }
   
