@@ -37,7 +37,7 @@ app.listen(PORT, () => {
 // Inquirer prompts for user input.
 function run(){
     inquirer
-    .prompt(
+    .prompt([
         {
             type: 'list',
             message: 'What would you like to do?',
@@ -53,7 +53,7 @@ function run(){
                 'Quit'
             ],
         }
-    ).then((answer) =>
+    ]).then((answer) =>
     {
         switch (answer.selection) {
             case 'View All Departments':
@@ -87,120 +87,91 @@ function run(){
 // GET all departments.
 function viewDepartments()
 {
-    //app.get('/api/department', (req, res) => 
-    //{
-        //const sql = `SELECT id, dept_name AS Depts FROM department`;
-        const sql = `SELECT * FROM DEPARTMENT`;
-        
-        db.query(sql, (err, rows) => {
-            if (err) {
-                res.status(500).json({ error: err.message });
-                return;
-            }
-            // res.json({
-            //     message: 'success',
-            //     data: rows
-            // });
+    const sql = `SELECT * FROM DEPARTMENT`;
+    
+    db.query(sql, (err, rows) => {
+        if (err) 
+        {
+            res.status(500).json({ error: err.message });
+            return;
+        }
             console.table(rows);
             run();
         });
-    //});
 }
 
 // GET all roles.
 function viewRoles()
 {
-    //app.get('/api/role', (req, res) => 
-    //{
-        //const sql = `SELECT id, title AS Roles FROM role`;
-        const sql = `SELECT * FROM ROLE`;
-        
-        db.query(sql, (err, rows) => {
-            if (err) {
-                res.status(500).json({ error: err.message });
-                return;
-            }
-            // res.json({
-            //     message: 'success',
-            //     data: rows
-            // });
+    const sql = `SELECT * FROM ROLE`;
+
+    db.query(sql, (err, rows) => {
+        if (err) 
+        {
+            res.status(500).json({ error: err.message });
+            return;
+        }
             console.table(rows);
             run();
         });
-    //});
 }
 
 // GET all employees.
 function viewEmployees()
 {
-    //app.get('/api/employee', (req, res) => 
-    //{
-        //const sql = `SELECT id, first_name, last_name AS Employees FROM employee`;
-        const sql = `SELECT * FROM EMPLOYEE`;
+    const sql = `SELECT * FROM EMPLOYEE`;
         
-        db.query(sql, (err, rows) => {
-            if (err) {
-                res.status(500).json({ error: err.message });
-                return;
-            }
-            // res.json({
-            //     message: 'success',
-            //     data: rows
-            // });
+    db.query(sql, (err, rows) => {
+        if (err) 
+        {
+            res.status(500).json({ error: err.message });
+            return;
+        }
             console.table(rows);
             run();
         });
-    //});
 }
 
 // POST new department.
 function addDept()
 {
-    //app.post('/api/new-department', ({ body }, res) => 
-    //{
-        inquirer
-        .prompt(
+    inquirer.prompt([
             {
                 name: 'dept_name',
                 type: 'input',
                 message: 'Enter the department name you want to add: '
             }
-        ).then((answer) => {
+        ]).then((answer) => {
 
-        const sql = `INSERT INTO department (dept_name) VALUES (?)`;
-        const params = [answer.dept_name];
-        db.query(sql, params, (err, result) => {
-            if (err) 
-            {
-                throw err;
-            }
+    const sql = `INSERT INTO department (dept_name) VALUES (?)`;
+    const params = [answer.dept_name];
+    
+    db.query(sql, params, (err, result) => {
+        if (err) 
+        {
+            throw err;
+        }
         
-        console.log('The new department has been added to the database.');
+    console.log('The new department has been added to the database.');
         
-        db.query(sql, params, (err, result) => {
-            if (err) {
-                res.status(400).json({ error: err.message });
-                return;
-            }
-            // res.json({
-            //     message: 'success',
-            //     data: body
-            // });
-            console.table(result);
-            run();
+    db.query(`SELECT * FROM department`, (err, result) => {
+        if (err) 
+        {
+            res.status(400).json({ error: err.message });
+            return;
+        }
+
+        console.table(result);
+        run();
         });
     });
     });
-    //});
 }
 
 // POST new role.
 function addRole()
 {
-    //app.post('/api/new-role', ({ body }, res) => 
-    //{
-        inquirer
-        .prompt(
+    inquirer.prompt([
             {
                 name: 'role_name',
                 type: 'input',
@@ -208,49 +179,45 @@ function addRole()
             },
             {
                 name: 'salary',
-                type: 'input',
+                type: 'number',
                 message: 'Enter the salary of the role you want to add (no commas): '
             },
             {
                 name: 'department_id',
-                type: 'input',
+                type: 'number',
                 message: 'Enter the department ID you want to add: '
             }
-        ).then((answer) => {
-        const sql = `INSERT INTO role (role_name, salary, department_id) VALUES (?, ?, ?)`;
-        const params = [answer.role_name, answer.salary, answer.departnent_id];
-        db.query(sql, params, (err, result) => {
-            if (err) 
-            {
-                throw err;
-            }
+        ]).then(function (answer) {
+    
+    const sql = `INSERT INTO role (role_name, salary, department_id) VALUES (?, ?, ?)`;
+    const params = [answer.role_name, answer.salary, answer.departnent_id];
 
-        console.log('The new role has been added to the database.');
+    db.query(sql, params, function (err, result) {
+        if (err) 
+        {
+            throw err;
+        }
+
+    console.log('The new role has been added to the database.');
         
-        db.query(sql, params, (err, result) => {
-            if (err) {
-                res.status(400).json({ error: err.message });
-                return;
-            }
-            // res.json({
-            //     message: 'success',
-            //     data: body
-            // });
-            console.table(result);
-            run();
+    db.query(`SELECT * FROM role`, (err, result) => {
+        if (err) 
+        {
+            res.status(400).json({ error: err.message });
+            return;
+        }
+
+        console.table(result);
+        run();
         });
     });
     });
-    //});
 }
 
 // POST new employee.
 function addEmployee()
 {
-    //app.post('/api/new-employee', ({ body }, res) => 
-    //{
-        inquirer
-        .prompt(
+    inquirer.prompt([
             {
                 name: 'first_name',
                 type: 'input',
@@ -273,42 +240,38 @@ function addEmployee()
                 message: 'Select the manager ID:',
                 choices: employee
             }
-        ).then((answer) => {
-        const sql = `INSERT INTO employee (first_name, last_name) VALUES (?)`;
-        const params = [answer.first_name, answer.last_name, answer.role_id, answer.manager_id];
+        ]).then(function (answer) {
 
-        db.query(sql, params, (err, result) => {
-            if (err) 
-            {
-                throw err;
-            }
+    const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`;
+    const params = [answer.first_name, answer.last_name, answer.role_id, answer.manager_id];
 
-        console.log('The new employee has been added to the database.');
+    db.query(sql, params, (err, result) => {
+        if (err) 
+        {
+            throw err;
+        }
+
+    console.log('The new employee has been added to the database.');
         
-        db.query(sql, params, (err, result) => {
-            if (err) {
-                res.status(400).json({ error: err.message });
-                return;
-            }
-            // res.json({
-            //     message: 'success',
-            //     data: body
-            // });
-            console.table(result);
-            run();
+    db.query(`SELECT * FROM employee`, (err, result) => {
+        if (err) 
+        {
+            res.status(400).json({ error: err.message });
+            return;
+        }
+
+        console.table(result);
+        run();
         });
     });
     });
-    //});
+
 }
 
 // PUT (update employee's role).
 function updateEmpRole()
 {
-    //app.put('/api/employee/:role_id', (req, res) => 
-    //{
-        inquirer
-        .prompt(
+    inquirer.prompt([
             {
                 name: 'last_name',
                 type: 'input',
@@ -319,42 +282,30 @@ function updateEmpRole()
                 type: 'number',
                 message: 'Enter the new role number for the employee: ',
             }
-        ).then((answer) => {
-        const sql = `UPDATE employee SET role_id = ? WHERE last_name = ?`;
-        const params = [answer.role_id, answer.last_name];
+        ]).then(function (answer)  {
 
-        db.query(sql, params, (err, result) => {
-            if (err) 
-            {
-                throw err;
-            }
+    const sql = `UPDATE employee SET role_id = ? WHERE last_name = ?`;
+    const params = [answer.role_id, answer.last_name];
 
-        console.log('The employee role has been updated.');
+    db.query(sql, params, (err, result) => {
+        if (err) 
+        {
+            throw err;
+        }
+
+    console.log('The employee role has been updated.');
         
-        db.query(`SELECT * FROM employee`, (err, result) => {
-            if (err) {
-                res.status(400).json({ error: err.message });
-            } 
-            // else if (!result.affectedRows) 
-            // {
-            //     res.json({
-            //         message: 'Role not found'
-            //     });
-            // } 
-            // else 
-            // {
-            //     res.json({
-            //         message: 'success',
-            //         data: req.body,
-            //         changes: result.affectedRows
-            //     });
-            // }
-            console.table(result);
-            run();
+    db.query(`SELECT * FROM employee`, (err, result) => {
+        if (err) 
+        {
+            res.status(400).json({ error: err.message });
+        } 
+
+        console.table(result);
+        run();
         });
     });
     });
-    //});
 }
   
 // BONUS:
@@ -364,6 +315,6 @@ function updateEmpRole()
 // DELETE departments, roles, employees.
 // GET total budget of department (aka combined salaries of all employees in department) 
 
-// Start inquirer prompt(s).
+// Start main inquirer prompts.
 run();
 // End of JS file
