@@ -22,7 +22,32 @@ if they wish to add a department, role, or employee, and if they wish to update 
 They can exit the program by selecting 'Quit'. </br>
 
 ## Screenshots
----Put stuff here---
+---Main screen--- </br>
+![Alt text](images/1_menu.png)
+
+---View Departments--- </br>
+![Alt text](images/2_view_departments.png)
+
+---View Roles--- </br>
+![Alt text](images/3_view_roles.png)
+
+---View Employees--- </br>
+![Alt text](images/4_view_employees.png)
+
+---Add Department--- </br>
+![Alt text](images/5_add_dept.png)
+
+---Add Role--- </br>
+![Alt text](images/6_add_role.png)
+
+---Add Employee--- </br>
+![Alt text](images/7_add_employee.png)
+
+---Update Employee's Role--- </br>
+![Alt text](images/8_update_emp_role.png)
+
+---Quitting--- </br>
+![Alt text](images/9_quit.png)
 
 ## Usage
 Simply click on the video and watch the magic happen. </br>  
@@ -37,6 +62,10 @@ on what it means to be a developer. </br>
 
 ## Credits
 Made by Allie Stewart. </br>
+Helpful information from my module 12 notes, </br>
+and https://www.npmjs.com for NPM knowledge, </br>
+as well as the good ol' https://stackoverflow.com for </br>
+miscellaneous questions about SQL database implementation with node. </br>
 
 ## Licenses
 Please refer to the LICENSE in the repository. </br>

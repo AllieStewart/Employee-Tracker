@@ -20,7 +20,7 @@ app.use((req, res) => {
 // Connect to database.
 const db = mysql.createConnection(
     {
-        // Host, username, password from my own info
+      // Host, username, password from my own info
       host: 'd6rii63wp64rsfb5.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
       user: 'tgd0mxln1cijce41',
       password: 'f78a0ymezkt8pv55',
@@ -29,15 +29,11 @@ const db = mysql.createConnection(
     console.log(`Connected to the employees_db database.`)
   );
 
-// App listening on port 3001.
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
+console.log("Welcome to the Employee Tracker System!");
 
 // Inquirer prompts for user input.
 function run(){
-    inquirer
-    .prompt([
+    inquirer.prompt(
         {
             type: 'list',
             message: 'What would you like to do?',
@@ -53,8 +49,8 @@ function run(){
                 'Quit'
             ],
         }
-    ]).then((answer) =>
-    {
+    ).then(function (answer)
+    {   // Switch statements for functions to execute, based on choice selection.
         switch (answer.selection) {
             case 'View All Departments':
                 viewDepartments();
@@ -74,7 +70,7 @@ function run(){
             case 'Add Employee':
                 addEmployee();
                 break;
-            case'Update Employee Role':
+            case 'Update Employee Role':
                 updateEmpRole();
                 break;
             default:
