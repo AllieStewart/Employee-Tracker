@@ -190,7 +190,7 @@ function addRole()
         ]).then(function (answer) {
     
     const sql = `INSERT INTO role (role_name, salary, department_id) VALUES (?, ?, ?)`;
-    const params = [answer.role_name, answer.salary, answer.departnent_id];
+    const params = [answer.role_name, answer.salary, answer.department_id];
 
     db.query(sql, params, function (err, result) {
         if (err) 
@@ -230,22 +230,20 @@ function addEmployee()
             },
             {
                 name: 'role_id',
-                type: 'list',
-                message: 'Select the role ID:',
-                choices: role
+                type: 'number',
+                message: 'Enter the role ID:',
             },
             {
                 name: 'manager_id',
-                type: 'list',
-                message: 'Select the manager ID:',
-                choices: employee
+                type: 'number',
+                message: 'Enter the manager ID:',
             }
         ]).then(function (answer) {
 
     const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`;
     const params = [answer.first_name, answer.last_name, answer.role_id, answer.manager_id];
 
-    db.query(sql, params, (err, result) => {
+    db.query(sql, params, function (err, result) {
         if (err) 
         {
             throw err;
@@ -287,7 +285,7 @@ function updateEmpRole()
     const sql = `UPDATE employee SET role_id = ? WHERE last_name = ?`;
     const params = [answer.role_id, answer.last_name];
 
-    db.query(sql, params, (err, result) => {
+    db.query(sql, params, function (err, result) {
         if (err) 
         {
             throw err;
