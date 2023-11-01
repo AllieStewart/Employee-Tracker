@@ -51,7 +51,7 @@ They can exit the program by selecting 'Quit'. </br>
 
 ## Usage
 Simply click on the video and watch the magic happen. </br>  
-Link to the video: --- </br>
+Link to the video: https://drive.google.com/file/d/13yjedJbEI6ZD0kAO4XxpbbCy4pkz42L9/view </br>
 
 ## What I Have Learned
 I have learned how to utilize SQL databases within the application, </br>
